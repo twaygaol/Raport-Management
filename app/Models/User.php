@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, HasRoles, HasPanelShield;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -47,10 +48,14 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-    
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
 }

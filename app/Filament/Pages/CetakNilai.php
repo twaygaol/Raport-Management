@@ -47,12 +47,12 @@ class CetakNilai extends Page
     {
         $siswa = Siswa::find($this->siswa_id);
         $nilai = Nilai::where('siswa_id', $this->siswa_id)->with('mapel')->get();
-    
+
         $pdf = Pdf::loadView('filament.pages.cetak-nilai-pdf', [
             'siswa' => $siswa,
             'nilai' => $nilai,
         ]);
-    
+
         return response()->streamDownload(fn () => print($pdf->output()), "Nilai_{$siswa->nama}.pdf");
     }
 }

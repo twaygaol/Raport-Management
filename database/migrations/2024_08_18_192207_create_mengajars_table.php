@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->foreignId('id_tahunakademik')->constrained('tahun_akademiks')->onDelete('cascade');
                 $table->string('semester');
                 $table->foreignId('id_guru')->constrained('gurus')->onDelete('cascade');
-                $table->foreignId('id_kelas')->constrained('kelases')->onDelete('cascade');
+                $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
                 $table->foreignId('id_mapel')->constrained('mapels')->onDelete('cascade');
                 $table->string('item');
                 $table->decimal('kkm', 5, 2); // Assuming KKM is a decimal value
