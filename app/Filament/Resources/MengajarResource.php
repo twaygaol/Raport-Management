@@ -26,34 +26,40 @@ class MengajarResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('id_tahunakademik')
-                    ->relationship('tahun_akademik', 'tahun_akademik')
-                    ->required(),
-                Forms\Components\TextInput::make('semester')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('id_guru')
-                    ->label('Guru')
-                    ->options(Guru::all()->pluck('nama', 'id'))
-                    ->required(),
-                Forms\Components\Select::make('id_kelas')
-                    ->label('Kelas')
-                    ->options(Kelas::all()->pluck('kelas', 'id'))
-                    ->required(),
-                Forms\Components\Select::make('id_mapel')
-                    ->label('Mata Pelajaran')
-                    ->options(Mapel::all()->pluck('name_mapel', 'id'))
-                    ->required(),
-                Forms\Components\TextInput::make('item')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('kkm')
-                    ->numeric()
-                    ->required()
-                    ->maxLength(5)
-                    ->placeholder('Masukkan KKM'),
-            ]);
+        ->schema([
+            Forms\Components\Select::make('id_tahunakademik')
+                ->relationship('tahun_akademik', 'tahun_akademik')
+                ->required(),
+            Forms\Components\Select::make('semester')
+                ->label('Semester')
+                ->relationship('tahun_akademik', 'semester')
+                ->required(),
+            Forms\Components\Select::make('id_guru')
+                ->label('Guru')
+                ->options(Guru::all()->pluck('name', 'id'))
+                ->required(),
+            Forms\Components\TextInput::make('nisn')
+                ->required()
+                ->label('Nuptk')
+                ->maxLength(255),
+            Forms\Components\Select::make('id_kelas')
+                ->label('Kelas')
+                ->options(Kelas::all()->pluck('kelas', 'id'))
+                ->required(),
+            Forms\Components\Select::make('id_mapel')
+                ->relationship('mapel', 'name_mapel') // Pastikan relasi dan kolomnya benar
+                ->required()
+                ->placeholder('Pilih Mapel')
+                ->options(Mapel::all()->pluck('name_mapel', 'id')), // Menentukan opsi yang valid                
+            Forms\Components\TextInput::make('item')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('kkm')
+                ->numeric()
+                ->required()
+                ->maxLength(5)
+                ->placeholder('Masukkan KKM'),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -62,7 +68,9 @@ class MengajarResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('tahun_akademik.tahun_akademik'),
                 Tables\Columns\TextColumn::make('semester'),
-                Tables\Columns\TextColumn::make('guru.nama'),
+                Tables\Columns\TextColumn::make('guru.name'),
+                Tables\Columns\TextColumn::make('nisn')
+                    ->label('Nuptk'),
                 Tables\Columns\TextColumn::make('kelas.kelas'),
                 Tables\Columns\TextColumn::make('mapel.name_mapel'),
                 Tables\Columns\TextColumn::make('item'),

@@ -17,4 +17,9 @@ class Kelas extends Model
     {
         return $this->hasMany(Nilai::class, 'id_kelas');
     }
+
+    public function sikabs()
+    {
+        return $this->hasMany(Sikab::class, 'kelas_id');
+    }
 }

@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class WaliKelas extends Model
 {
-    use HasFactory;
-    
     protected $fillable = [
+        'nama',
         'guru_id',
         'kelas_id',
     ];
@@ -23,4 +21,9 @@ class WaliKelas extends Model
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
     }
+
+    public function siswa()
+{
+    return $this->belongsTo(Siswa::class, 'kelas_id', 'id'); // Adjust as per your database
+}
 }

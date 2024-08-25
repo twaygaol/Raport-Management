@@ -23,6 +23,8 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'nisn',
+        'kelas_id',
         'password',
     ];
 
@@ -57,5 +59,16 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function siswa()
+    {
+        return $this->hasOne(Siswa::class, 'user_id');
+    }
+
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'foreign_key', 'local_key');
     }
 }

@@ -26,7 +26,7 @@ class SiswaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')->required(),
+                Forms\Components\TextInput::make('name')->required(),
                 Forms\Components\TextInput::make('nisn')->required(),
                 Forms\Components\Select::make('kelas_id')
                     ->label('Kelas')
@@ -39,19 +39,31 @@ class SiswaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\TextColumn::make('nisn'),
-                Tables\Columns\TextColumn::make('kelas.kelas')->label('Kelas'),
+                Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nisn')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kelas.kelas')
+                    ->sortable()
+                    ->searchable()
+                    ->label('Kelas'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(), // Tambahkan tombol view
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

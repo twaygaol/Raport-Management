@@ -1,0 +1,1 @@
+<h1 class="text-xl font-bold poppins">E-Raport <span class="text-lg poppins font-medium">SMP Tugas Pelita Binjai</span> </h1>

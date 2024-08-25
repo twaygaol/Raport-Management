@@ -13,6 +13,7 @@ class Mengajar extends Model
         'id_tahunakademik',
         'semester',
         'id_guru',
+        'nisn',
         'id_kelas',
         'id_mapel',
         'item',

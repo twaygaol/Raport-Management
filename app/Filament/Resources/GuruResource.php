@@ -25,7 +25,12 @@ class GuruResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')->required(),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->label('Nama'),
+                Forms\Components\TextInput::make('nisn')
+                    ->required()
+                    ->label('Nuptk'),
                 Forms\Components\TextInput::make('matapelajaran')->required(),
             ]);
     }
@@ -34,18 +39,33 @@ class GuruResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\TextColumn::make('matapelajaran'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Guru')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nisn')
+                    ->label('NUPTK')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('matapelajaran')
+                    ->label('Mata Pelajaran')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
-                //
+                // Tambahkan filter di sini jika diperlukan
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(), // Tambahkan tombol view
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -53,7 +73,7 @@ class GuruResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // Tambahkan relasi di sini jika diperlukan
         ];
     }
 

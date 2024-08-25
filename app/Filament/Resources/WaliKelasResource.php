@@ -29,7 +29,7 @@ class WaliKelasResource extends Resource
             ->schema([
                 Forms\Components\Select::make('guru_id')
                     ->label('Nama Guru')
-                    ->options(Guru::all()->pluck('nama', 'id'))
+                    ->options(Guru::all()->pluck('name', 'id'))
                     ->required(),
                 Forms\Components\Select::make('kelas_id')
                     ->label('Kelas')
@@ -42,7 +42,7 @@ class WaliKelasResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('guru.nama')->label('Nama Guru'),
+                Tables\Columns\TextColumn::make('guru.name')->label('Name Guru'),
                 Tables\Columns\TextColumn::make('kelas.kelas')->label('Kelas'),
             ])
             ->filters([

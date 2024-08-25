@@ -55,4 +55,15 @@ class CetakNilai extends Page
 
         return response()->streamDownload(fn () => print($pdf->output()), "Nilai_{$siswa->nama}.pdf");
     }
+
+    public static function canView(): bool
+    {
+        return Gate::allows('view', self::class);
+    }
+    
+    public static function canAccess(): bool
+    {
+        // Membatasi akses ke halaman ini hanya untuk superadmin
+        return auth()->user()->hasRole('super_admin');
+    }
 }

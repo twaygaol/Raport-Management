@@ -15,7 +15,8 @@ class Guru extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'nama',
+        'name',
+        'nisn',
         'matapelajaran',
     ];
 }

@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use Spatie\Permission\Models\Role; // Menggunakan model Role dari Spatie
 use App\Models\User;
+use App\Models\Guru;
+use App\Models\Siswa;
+use App\Models\WaliKelas;
+use App\Models\Kelas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
 use App\Filament\Resources\UserResource\Pages;
 use Filament\Resources\Resource;
@@ -24,9 +28,71 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('hak_akses')
+                    ->label('Hak Akses')
+                    ->options([
+                        'Guru' => 'Guru',
+                        'Siswa' => 'Siswa',
+                        'Wali Kelas' => 'Wali Kelas',
+                    ])
+                    ->reactive()
+                    ->required(),
+
+                // Select untuk Nama, menyesuaikan dengan Hak Akses yang dipilih
+                Select::make('entity_id') // Menggunakan entity_id untuk memilih entitas berdasarkan hak akses
+                    ->label('Nama')
+                    ->options(function (callable $get) {
+                        $hakAkses = $get('hak_akses');
+
+                        if ($hakAkses === 'Guru') {
+                            return Guru::pluck('name', 'id');
+                        } elseif ($hakAkses === 'Siswa') {
+                            return Siswa::pluck('name', 'id');
+                        } elseif ($hakAkses === 'Wali Kelas') {
+                            return WaliKelas::pluck('name', 'id');
+                        }
+
+                        return [];
+                    })
+                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                        $hakAkses = $get('hak_akses');
+
+                        if ($hakAkses === 'Guru') {
+                            $set('name', Guru::find($state)->name);
+                        } elseif ($hakAkses === 'Siswa') {
+                            $set('name', Siswa::find($state)->name);
+                        } elseif ($hakAkses === 'Wali Kelas') {
+                            $set('name', WaliKelas::find($state)->name);
+                        }
+                    })
+                    ->searchable()
+                    ->required(),
+
+                // Menyimpan nama yang dipilih ke kolom name
                 TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                    ->label('Nama')
+                    ->disabled() // Field ini diisi secara otomatis oleh Select di atas
+                    ->required(),
+
+                TextInput::make('nisn')
+                    ->label('Nisn/Nuptk')
+                    ->required(),
+
+                // Input tambahan untuk Kelas, hanya muncul jika hak akses adalah Wali Kelas
+                Select::make('kelas_id')
+                    ->label('Kelas')
+                    ->options(Kelas::pluck('kelas', 'id')->toArray())
+                    ->visible(fn (callable $get) => $get('hak_akses') === 'Wali Kelas')
+                    ->required(),
+
+                // Select untuk Role, menyesuaikan dengan Hak Akses yang dipilih
+                Select::make('roles')
+                    ->label('Role')
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->searchable()
+                    ->reactive()
+                    ->required(),
 
                 TextInput::make('email')
                     ->required()
@@ -37,11 +103,6 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->maxLength(255),
-                Select::make('roles')
-                    ->relationship('roles', 'name')
-                    ->preload()
-                    ->searchable()
-                
             ]);
     }
 
@@ -49,7 +110,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Name'),
+                Tables\Columns\TextColumn::make('name')->label('Nama'),
                 Tables\Columns\TextColumn::make('email')->label('Email'),
             ])
             ->actions([
@@ -58,7 +119,7 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

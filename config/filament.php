@@ -86,4 +86,57 @@ return [
 
     'livewire_loading_delay' => 'default',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Role-Based Access Control
+    |--------------------------------------------------------------------------
+    |
+    | Here you can configure role-based access control for Filament pages and resources.
+    |
+    | This configuration is used by Filament Shield and other plugins to control
+    | access to different parts of the Filament panel based on user roles.
+    |
+    */
+
+    'role_based_access' => [
+        'enabled' => true,
+        'role_permission_prefixes' => [
+            'view' => 'view',
+            'create' => 'create',
+            'update' => 'update',
+            'delete' => 'delete',
+        ],
+        'default_role' => 'panel_user', // Adjust default role as needed
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Livewire Components
+    |--------------------------------------------------------------------------
+    |
+    | Here you can register custom Livewire components used within Filament pages.
+    |
+    */
+
+    'livewire_components' => [
+        // Add your custom Livewire components here if needed
+        // 'component_name' => \App\Http\Livewire\YourComponent::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pages Path
+    |--------------------------------------------------------------------------
+    |
+    | This is the directory where Filament's pages will be discovered.
+    |
+    | You should ensure that this path is correct and points to where your
+    | Filament pages are located.
+    |
+    */
+
+    'pages' => [
+        'path' => base_path('app/Filament/Pages'),
+    ],
+
 ];
